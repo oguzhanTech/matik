@@ -24,7 +24,7 @@ const ZikirButton = ({ count, onZikir, onReset, onResetAll, disabled = false }) 
       >
         {disabled ? "Ses Çalıyor..." : "Zikir Çek"}
       </button>
-      <div className="counter">Sayaç: {count}</div>
+      <div className="counter">Zikirmatik: {count}</div>
       <div style={{ 
         display: "flex", 
         gap: "10px",
