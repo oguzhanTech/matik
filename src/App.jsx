@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useCallback } from "react";
+import React, { useState, useEffect, useCallback, useRef } from "react";
 import ZikirButton from "./ZikirButton";
 import ZikirSelector from "./ZikirSelector";
 import AyetBox from "./AyetBox";
@@ -18,6 +18,11 @@ const App = () => {
   const [showInfoBox, setShowInfoBox] = useState(true);
   const [showImage, setShowImage] = useState(false);
   const [imageOpacity, setImageOpacity] = useState(1);
+  // Otomatik zikir için state'ler
+  const [isAutoZikirActive, setIsAutoZikirActive] = useState(false);
+  const [autoZikirTarget, setAutoZikirTarget] = useState(10);
+  const [autoZikirCurrent, setAutoZikirCurrent] = useState(0);
+  const [autoZikirIntervalId, setAutoZikirIntervalId] = useState(null);
 
   const playZikirSound = useCallback((zikir) => {
     if (zikir.sound && !isPlaying) {
@@ -79,6 +84,78 @@ const App = () => {
       playZikirSound(selectedZikir);
     }
   }, [selectedZikir, isPlaying, playZikirSound]);
+
+  // Otomatik zikir başlatma (her ses bitince yenisi başlar)
+  const autoZikirStoppedRef = useRef(false);
+  const autoZikirAudioRef = useRef(null);
+  const [isAutoZikirBusy, setIsAutoZikirBusy] = useState(false);
+
+  const handleStartAutoZikir = useCallback(() => {
+    if (isAutoZikirActive || isPlaying || isAutoZikirBusy) return;
+    setIsAutoZikirActive(true);
+    setIsAutoZikirBusy(true);
+    setAutoZikirCurrent(0);
+    autoZikirStoppedRef.current = false;
+    function playNext(current) {
+      if (autoZikirStoppedRef.current || current >= autoZikirTarget) {
+        setIsAutoZikirActive(false);
+        setIsAutoZikirBusy(false);
+        autoZikirAudioRef.current = null;
+        return;
+      }
+      setAutoZikirCurrent(current + 1);
+      setCounts(prevCounts => ({
+        ...prevCounts,
+        [selectedZikir.id]: (prevCounts[selectedZikir.id] || 0) + 1
+      }));
+      if (selectedZikir.sound) {
+        const audio = new Audio(selectedZikir.sound);
+        autoZikirAudioRef.current = audio;
+        audio.addEventListener('ended', () => {
+          setTimeout(() => playNext(current + 1), 100); // 100ms ara
+        });
+        audio.addEventListener('error', () => {
+          setTimeout(() => playNext(current + 1), 100);
+        });
+        audio.play().catch(() => {
+          setTimeout(() => playNext(current + 1), 100);
+        });
+      } else {
+        setTimeout(() => playNext(current + 1), 500);
+      }
+    }
+    playNext(0);
+    setAutoZikirIntervalId({ stop: () => { autoZikirStoppedRef.current = true; if (autoZikirAudioRef.current) { autoZikirAudioRef.current.pause(); autoZikirAudioRef.current.currentTime = 0; } } });
+  }, [isAutoZikirActive, isPlaying, isAutoZikirBusy, autoZikirTarget, selectedZikir]);
+
+  // Otomatik zikir durdurma
+  const handleStopAutoZikir = useCallback(() => {
+    if (autoZikirIntervalId && typeof autoZikirIntervalId.stop === 'function') {
+      autoZikirIntervalId.stop();
+    }
+    setAutoZikirIntervalId(null);
+    setIsAutoZikirActive(false);
+    setIsAutoZikirBusy(false);
+    if (autoZikirAudioRef.current) {
+      autoZikirAudioRef.current.pause();
+      autoZikirAudioRef.current.currentTime = 0;
+      autoZikirAudioRef.current = null;
+    }
+  }, [autoZikirIntervalId]);
+
+  // Otomatik zikir tamamlandığında durdur
+  useEffect(() => {
+    if (isAutoZikirActive && autoZikirCurrent >= autoZikirTarget) {
+      handleStopAutoZikir();
+    }
+  }, [autoZikirCurrent, autoZikirTarget, isAutoZikirActive, handleStopAutoZikir]);
+
+  // Zikir veya zikir seçimi değişirse otomatik zikir sıfırlansın
+  useEffect(() => {
+    handleStopAutoZikir();
+    setAutoZikirCurrent(0);
+    setIsAutoZikirBusy(false);
+  }, [selectedZikir]);
 
   useEffect(() => {
     const onSpace = e => {
@@ -146,7 +223,19 @@ const App = () => {
           )}
         </div>
         <ZikirSelector selected={selectedZikir} onSelect={setSelectedZikir} counts={counts} />
-        <ZikirButton count={currentCount} onZikir={handleZikir} onReset={handleResetCount} onResetAll={handleResetAllCounts} disabled={isPlaying} />
+        <ZikirButton 
+          count={currentCount} 
+          onZikir={handleZikir} 
+          onReset={handleResetCount} 
+          onResetAll={handleResetAllCounts} 
+          disabled={isPlaying || isAutoZikirActive || isAutoZikirBusy}
+          isAutoZikirActive={isAutoZikirActive}
+          autoZikirTarget={autoZikirTarget}
+          setAutoZikirTarget={setAutoZikirTarget}
+          autoZikirCurrent={autoZikirCurrent}
+          onStartAutoZikir={handleStartAutoZikir}
+          onStopAutoZikir={handleStopAutoZikir}
+        />
       </div>
       <div style={{ width: 400, display: "flex", flexDirection: "column", alignItems: "center", justifyContent: "center", background: "rgba(255, 255, 255, 0.8)", boxShadow: "-2px 0 8px rgba(0, 0, 0, 0.1)" }}>
         <AyetBox ayet={sure} />
