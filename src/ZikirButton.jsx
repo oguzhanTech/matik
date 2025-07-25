@@ -2,6 +2,31 @@ import React from "react";
 
 const ZikirButton = ({ count, onZikir, onReset, onResetAll, disabled = false, isAutoZikirActive, autoZikirTarget, setAutoZikirTarget, autoZikirCurrent, onStartAutoZikir, onStopAutoZikir }) => {
   const hasAnyCount = count > 0;
+  // input için local state
+  const [inputValue, setInputValue] = React.useState(autoZikirTarget?.toString() || "10");
+  React.useEffect(() => {
+    if (autoZikirTarget === null || autoZikirTarget === undefined || autoZikirTarget === "") {
+      setInputValue("");
+    } else {
+      setInputValue(autoZikirTarget.toString());
+    }
+  }, [autoZikirTarget]);
+  const handleInputChange = (e) => {
+    const val = e.target.value;
+    // Boş bırakılabiliyor
+    if (val === "") {
+      setInputValue("");
+      setAutoZikirTarget(null);
+      return;
+    }
+    // Sadece rakam
+    const num = Number(val);
+    if (!isNaN(num)) {
+      setInputValue(val);
+      setAutoZikirTarget(num);
+    }
+  };
+  const isAutoZikirInputInvalid = inputValue === "" || Number(inputValue) < 1 || Number(inputValue) > 500;
   return (
     <div style={{ 
       display: "flex", 
@@ -31,27 +56,24 @@ const ZikirButton = ({ count, onZikir, onReset, onResetAll, disabled = false, is
             type="number"
             min={1}
             max={500}
-            value={autoZikirTarget}
+            value={inputValue}
             disabled={isAutoZikirActive}
-            onChange={e => {
-              let val = Math.max(1, Math.min(500, Number(e.target.value)));
-              setAutoZikirTarget(val);
-            }}
+            onChange={handleInputChange}
             style={{ width: 60, padding: "4px 6px", borderRadius: 4, border: "1px solid #ccc", fontSize: 14 }}
           />
           <span>adet</span>
           {!isAutoZikirActive ? (
             <button
               onClick={onStartAutoZikir}
-              disabled={disabled}
+              disabled={disabled || isAutoZikirInputInvalid}
               style={{
                 padding: "5px 12px",
                 fontSize: "12px",
-                backgroundColor: "#2ecc40",
+                backgroundColor: isAutoZikirInputInvalid ? "#aaa" : "#2ecc40",
                 color: "white",
                 border: "none",
                 borderRadius: "5px",
-                cursor: disabled ? "not-allowed" : "pointer"
+                cursor: disabled || isAutoZikirInputInvalid ? "not-allowed" : "pointer"
               }}
             >
               Otomatik Zikir Çek

@@ -92,39 +92,42 @@ const App = () => {
 
   const handleStartAutoZikir = useCallback(() => {
     if (isAutoZikirActive || isPlaying || isAutoZikirBusy) return;
+    if (!autoZikirTarget || isNaN(autoZikirTarget) || autoZikirTarget < 1 || autoZikirTarget > 500) return;
     setIsAutoZikirActive(true);
     setIsAutoZikirBusy(true);
     setAutoZikirCurrent(0);
     autoZikirStoppedRef.current = false;
     function playNext(current) {
-      if (autoZikirStoppedRef.current || current >= autoZikirTarget) {
+      if (autoZikirStoppedRef.current || current > autoZikirTarget) {
         setIsAutoZikirActive(false);
         setIsAutoZikirBusy(false);
         autoZikirAudioRef.current = null;
         return;
       }
-      setAutoZikirCurrent(current + 1);
-      setCounts(prevCounts => ({
-        ...prevCounts,
-        [selectedZikir.id]: (prevCounts[selectedZikir.id] || 0) + 1
-      }));
-      if (selectedZikir.sound) {
-        const audio = new Audio(selectedZikir.sound);
-        autoZikirAudioRef.current = audio;
-        audio.addEventListener('ended', () => {
-          setTimeout(() => playNext(current + 1), 100); // 100ms ara
-        });
-        audio.addEventListener('error', () => {
-          setTimeout(() => playNext(current + 1), 100);
-        });
-        audio.play().catch(() => {
-          setTimeout(() => playNext(current + 1), 100);
-        });
-      } else {
-        setTimeout(() => playNext(current + 1), 500);
+      if (current <= autoZikirTarget) {
+        setAutoZikirCurrent(current);
+        setCounts(prevCounts => ({
+          ...prevCounts,
+          [selectedZikir.id]: (prevCounts[selectedZikir.id] || 0) + 1
+        }));
+        if (selectedZikir.sound) {
+          const audio = new Audio(selectedZikir.sound);
+          autoZikirAudioRef.current = audio;
+          audio.addEventListener('ended', () => {
+            setTimeout(() => playNext(current + 1), 100); // 100ms ara
+          });
+          audio.addEventListener('error', () => {
+            setTimeout(() => playNext(current + 1), 100);
+          });
+          audio.play().catch(() => {
+            setTimeout(() => playNext(current + 1), 100);
+          });
+        } else {
+          setTimeout(() => playNext(current + 1), 500);
+        }
       }
     }
-    playNext(0);
+    playNext(1);
     setAutoZikirIntervalId({ stop: () => { autoZikirStoppedRef.current = true; if (autoZikirAudioRef.current) { autoZikirAudioRef.current.pause(); autoZikirAudioRef.current.currentTime = 0; } } });
   }, [isAutoZikirActive, isPlaying, isAutoZikirBusy, autoZikirTarget, selectedZikir]);
 
@@ -142,13 +145,6 @@ const App = () => {
       autoZikirAudioRef.current = null;
     }
   }, [autoZikirIntervalId]);
-
-  // Otomatik zikir tamamlandığında durdur
-  useEffect(() => {
-    if (isAutoZikirActive && autoZikirCurrent >= autoZikirTarget) {
-      handleStopAutoZikir();
-    }
-  }, [autoZikirCurrent, autoZikirTarget, isAutoZikirActive, handleStopAutoZikir]);
 
   // Zikir veya zikir seçimi değişirse otomatik zikir sıfırlansın
   useEffect(() => {
