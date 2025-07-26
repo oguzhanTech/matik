@@ -1,0 +1,18 @@
+{
+  "zikir_button": "Zikir Çek",
+  "counter": "Zikirmatik: {{count}}",
+  "reset": "Bu Sayacı Sıfırla",
+  "reset_all": "Tüm Sayaçları Sıfırla",
+  "auto_zikir": "Otomatik Zikir Çek",
+  "stop": "Durdur",
+  "adet": "adet",
+  "zikir_select": "Zikir Seç:",
+  "auto_zikir_status": "Otomatik zikir: {{current}} / {{target}}",
+  "playing": "Ses Çalıyor...",
+  "auto_active": "Otomatik Zikir Aktif",
+  "info_spacebar": "💡 Klavyenizin Boşluk tuşu ile de zikir çekebilirsiniz",
+  "new_sure": "Yeni Sure",
+  "read": "Oku",
+  "pause": "Duraklat",
+
+} 

@@ -1,0 +1,18 @@
+{
+  "zikir_button": "Count Zikr",
+  "counter": "Zikirmatik: {{count}}",
+  "reset": "Reset This Counter",
+  "reset_all": "Reset All Counters",
+  "auto_zikir": "Auto Zikr",
+  "stop": "Stop",
+  "adet": "pcs",
+  "zikir_select": "Select Zikr:",
+  "auto_zikir_status": "Auto zikr: {{current}} / {{target}}",
+  "playing": "Playing sound...",
+  "auto_active": "Auto Zikr Active",
+  "info_spacebar": "💡 You can also count zikr with your keyboard Space key",
+  "new_sure": "New Surah",
+  "read": "Read",
+  "pause": "Pause",
+
+} 

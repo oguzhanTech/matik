@@ -1,7 +1,9 @@
 import React from "react";
+import { useTranslation } from 'react-i18next';
 
 const ZikirButton = ({ count, onZikir, onReset, onResetAll, disabled = false, isAutoZikirActive, autoZikirTarget, setAutoZikirTarget, autoZikirCurrent, onStartAutoZikir, onStopAutoZikir }) => {
   const hasAnyCount = count > 0;
+  const { t } = useTranslation();
   // input için local state
   const [inputValue, setInputValue] = React.useState(autoZikirTarget?.toString() || "10");
   React.useEffect(() => {
@@ -46,9 +48,9 @@ const ZikirButton = ({ count, onZikir, onReset, onResetAll, disabled = false, is
           cursor: disabled ? "not-allowed" : "pointer"
         }}
       >
-        {disabled && isAutoZikirActive ? "Otomatik Zikir Aktif" : disabled ? "Ses Çalıyor..." : "Zikir Çek"}
+        {disabled && isAutoZikirActive ? t('auto_active') : disabled ? t('playing') : t('zikir_button')}
       </button>
-      <div className="counter">Zikir Sayacı: {count}</div>
+      <div className="counter">{t('counter', {count})}</div>
       {/* Otomatik zikir alanı */}
       <div style={{ display: "flex", flexDirection: "column", alignItems: "center", gap: "6px", width: "100%" }}>
         <div style={{ display: "flex", gap: "8px", alignItems: "center" }}>
@@ -61,7 +63,7 @@ const ZikirButton = ({ count, onZikir, onReset, onResetAll, disabled = false, is
             onChange={handleInputChange}
             style={{ width: 60, padding: "4px 6px", borderRadius: 4, border: "1px solid #ccc", fontSize: 14 }}
           />
-          <span>adet</span>
+          <span>{t('adet')}</span>
           {!isAutoZikirActive ? (
             <button
               onClick={onStartAutoZikir}
@@ -76,7 +78,7 @@ const ZikirButton = ({ count, onZikir, onReset, onResetAll, disabled = false, is
                 cursor: disabled || isAutoZikirInputInvalid ? "not-allowed" : "pointer"
               }}
             >
-              Otomatik Zikir Çek
+              {t('auto_zikir')}
             </button>
           ) : (
             <button
@@ -91,13 +93,13 @@ const ZikirButton = ({ count, onZikir, onReset, onResetAll, disabled = false, is
                 cursor: "pointer"
               }}
             >
-              Durdur
+              {t('stop')}
             </button>
           )}
         </div>
         {isAutoZikirActive && (
           <div style={{ fontSize: 13, color: "#2d5a27", marginTop: 2 }}>
-            Otomatik zikir: {autoZikirCurrent} / {autoZikirTarget}
+            {t('auto_zikir_status', {current: autoZikirCurrent, target: autoZikirTarget})}
           </div>
         )}
       </div>
@@ -121,7 +123,7 @@ const ZikirButton = ({ count, onZikir, onReset, onResetAll, disabled = false, is
               cursor: "pointer"
             }}
           >
-            Bu Sayacı Sıfırla
+            {t('reset')}
           </button>
         )}
         {hasAnyCount && (
@@ -138,7 +140,7 @@ const ZikirButton = ({ count, onZikir, onReset, onResetAll, disabled = false, is
               cursor: "pointer"
             }}
           >
-            Tüm Sayaçları Sıfırla
+            {t('reset_all')}
           </button>
         )}
       </div>

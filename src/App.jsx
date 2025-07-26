@@ -1,9 +1,12 @@
 import React, { useState, useEffect, useCallback, useRef } from "react";
+import './i18n';
 import ZikirButton from "./ZikirButton";
 import ZikirSelector from "./ZikirSelector";
 import AyetBox from "./AyetBox";
 import { zikirs, defaultZikir } from "./zikirs";
 import { sureler } from "./ayetler";
+import LanguageSwitcher from "./LanguageSwitcher";
+import { useTranslation } from 'react-i18next';
 
 function getRandomSure() {
   // Tüm surelerden rastgele bir sure seç
@@ -11,6 +14,7 @@ function getRandomSure() {
 }
 
 const App = () => {
+  const { t } = useTranslation();
   const [selectedZikir, setSelectedZikir] = useState(defaultZikir);
   const [counts, setCounts] = useState({});
   const [sure, setSure] = useState(getRandomSure());
@@ -196,6 +200,10 @@ const App = () => {
 
   return (
     <div className="app-container" style={{ display: "flex", flexDirection: "row", minHeight: "100vh" }}>
+      {/* Dil seçici sol üstte */}
+      <div style={{ position: 'fixed', top: 16, left: 16, zIndex: 1000 }}>
+        <LanguageSwitcher />
+      </div>
       <div style={{ flex: 1, display: "flex", flexDirection: "column", alignItems: "center", justifyContent: "center" }}>
         <div style={{
           marginBottom: "30px",
@@ -239,7 +247,7 @@ const App = () => {
           className="new-ayet-button"
           onClick={handleAyetChange}
         >
-          Yeni Sure
+          {t('new_sure')}
         </button>
       </div>
       {showInfoBox && (
@@ -258,7 +266,7 @@ const App = () => {
           alignItems: "center",
           gap: "10px"
         }}>
-          <span>💡 Klavyenizin Boşluk tuşu ile de zikir çekebilirsiniz</span>
+          <span>{t('info_spacebar')}</span>
           <button
             onClick={() => setShowInfoBox(false)}
             style={{
