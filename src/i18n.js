@@ -19,8 +19,8 @@ const resources = {
       "new_sure": "Yeni Sure",
       "read": "Oku",
       "pause": "Duraklat",
-      "bookmark_button": "Sayfayı Yer İmlerine Ekle",
-      "bookmark_message": "Bu sayfayı yer imlerinize eklemek için lütfen tarayıcınızın menüsünü kullanın veya Ctrl+D (Windows) / Cmd+D (Mac) tuşlarına basın."
+      "bookmark_button": "Zikirmatik Uygulamasını Yer İmlerine Ekle",
+      "bookmark_message": "Zikirmatik uygulamasını yer imlerinize eklemek için lütfen tarayıcınızın menüsünü kullanın veya Ctrl+D (Windows) / Cmd+D (Mac) tuşlarına basın."
     }
   },
   en: {
@@ -40,8 +40,8 @@ const resources = {
       "new_sure": "New Surah",
       "read": "Read",
       "pause": "Pause",
-      "bookmark_button": "Add Page to Bookmarks",
-      "bookmark_message": "To bookmark this page, please use your browser's menu or press Ctrl+D (Windows) / Cmd+D (Mac)."
+      "bookmark_button": "Add Zikirmatik to Bookmarks",
+      "bookmark_message": "To bookmark Zikirmatik, please use your browser's menu or press Ctrl+D (Windows) / Cmd+D (Mac)."
     }
   }
 };

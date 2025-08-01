@@ -375,4 +375,10 @@ body {
   .zikir-button, .counter, .reset-button, .reset-all-button {
     margin-bottom: 1rem !important;
   }
+  .bookmark-fixed {
+    display: none !important;
+  }
+  .info-box {
+    display: none !important;
+  }
 }
