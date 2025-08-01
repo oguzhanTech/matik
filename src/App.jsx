@@ -7,6 +7,7 @@ import { zikirs, defaultZikir } from "./zikirs";
 import { sureler } from "./ayetler";
 import LanguageSwitcher from "./LanguageSwitcher";
 import { useTranslation } from 'react-i18next';
+import { Helmet } from "react-helmet";
 
 function getRandomSure() {
   // Tüm surelerden rastgele bir sure seç
@@ -237,8 +238,24 @@ const App = () => {
 
   const currentCount = counts[selectedZikir.id] || 0;
 
+  const userLang = navigator.language || navigator.userLanguage;
+  const isTurkish = userLang && userLang.startsWith("tr");
+
+  const title = isTurkish
+    ? "Zikirmatik | Online Zikir Çek, Dua Dinle - Online Tesbih Sayacı"
+    : "Zikirmatik | Online Tasbih Counter, Listen Prayers, Count Zikr";
+  const description = isTurkish
+    ? "Zikirmatik ile Online Zikir Çekin, Arapça ve Türkçe Sureleri Dinleyin | Zikirmatik Uygulaması"
+    : "Use Zikirmatik to count Zikr online, listen surahs, and more | Online Tasbih Counter";
+
+
   return (
-    <div className="app-container" style={{ display: "flex", flexDirection: "row", minHeight: "100vh" }}>
+    <>
+      <Helmet>
+        <title>{title}</title>
+        <meta name="description" content={description} />
+      </Helmet>
+      <div className="app-container" style={{ display: "flex", flexDirection: "row", minHeight: "100vh" }}>
       {/* Dil seçici sol üstte */}
       <div style={{ position: 'fixed', top: 16, left: 16, zIndex: 1000 }}>
         <LanguageSwitcher />
@@ -398,6 +415,7 @@ const App = () => {
         </div>
       )}
     </div>
+    </>
   );
 };
 
