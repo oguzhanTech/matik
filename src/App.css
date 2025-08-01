@@ -70,3 +70,9 @@
 .read-the-docs {
   color: #888;
 }
+
+@media (max-width: 600px) {
+  .bookmark-fixed {
+    display: none !important;
+  }
+}

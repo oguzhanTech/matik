@@ -16,7 +16,11 @@ const resources = {
       "playing": "Ses Çalıyor...",
       "auto_active": "Otomatik Zikir Aktif",
       "info_spacebar": "💡 Klavyenizin Boşluk tuşu ile de zikir çekebilirsiniz",
-      "new_sure": "Yeni Sure"
+      "new_sure": "Yeni Sure",
+      "read": "Oku",
+      "pause": "Duraklat",
+      "bookmark_button": "Sayfayı Yer İmlerine Ekle",
+      "bookmark_message": "Bu sayfayı yer imlerinize eklemek için lütfen tarayıcınızın menüsünü kullanın veya Ctrl+D (Windows) / Cmd+D (Mac) tuşlarına basın."
     }
   },
   en: {
@@ -33,7 +37,11 @@ const resources = {
       "playing": "Playing sound...",
       "auto_active": "Auto Zikr Active",
       "info_spacebar": "💡 You can also count zikr with your keyboard Space key",
-      "new_sure": "New Surah"
+      "new_sure": "New Surah",
+      "read": "Read",
+      "pause": "Pause",
+      "bookmark_button": "Add Page to Bookmarks",
+      "bookmark_message": "To bookmark this page, please use your browser's menu or press Ctrl+D (Windows) / Cmd+D (Mac)."
     }
   }
 };

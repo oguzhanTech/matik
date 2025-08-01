@@ -14,5 +14,6 @@
   "new_sure": "New Surah",
   "read": "Read",
   "pause": "Pause",
-
+  "bookmark_button": "Add Page to Bookmarks",
+  "bookmark_message": "To bookmark this page, please use your browser's menu or press Ctrl+D (Windows) / Cmd+D (Mac)."
 } 

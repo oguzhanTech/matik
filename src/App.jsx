@@ -27,6 +27,26 @@ const App = () => {
   const [autoZikirTarget, setAutoZikirTarget] = useState(10);
   const [autoZikirCurrent, setAutoZikirCurrent] = useState(0);
   const [autoZikirIntervalId, setAutoZikirIntervalId] = useState(null);
+  const [showBookmarkMsg, setShowBookmarkMsg] = useState(false);
+  const [isBookmarkHovered, setIsBookmarkHovered] = useState(false);
+  
+  const handleBookmark = () => {
+    // Modern tarayıcılar çoğunlukla otomatik eklemeyi engeller
+    try {
+      if (window.sidebar && window.sidebar.addPanel) {
+        // Firefox <23
+        window.sidebar.addPanel(document.title, window.location.href, '');
+      } else if (window.external && ('AddFavorite' in window.external)) {
+        // IE Favorites
+        window.external.AddFavorite(window.location.href, document.title);
+      } else {
+        // Diğer tarayıcılar için kullanıcıya bilgi göster
+        setShowBookmarkMsg(true);
+      }
+    } catch (e) {
+      setShowBookmarkMsg(true);
+    }
+  };
 
   const playZikirSound = useCallback((zikir) => {
     if (zikir.sound && !isPlaying) {
@@ -203,6 +223,51 @@ const App = () => {
       {/* Dil seçici sol üstte */}
       <div style={{ position: 'fixed', top: 16, left: 16, zIndex: 1000 }}>
         <LanguageSwitcher />
+      </div>
+      {/* Sağ üst köşe: Yer İmlerine Ekle butonu ve mesajı */}
+      <div className="bookmark-fixed" style={{ position: 'fixed', top: 16, right: 16, zIndex: 1000, display: 'flex', flexDirection: 'column', alignItems: 'flex-end' }}>
+        <button
+          onClick={handleBookmark}
+          onMouseEnter={() => setIsBookmarkHovered(true)}
+          onMouseLeave={() => setIsBookmarkHovered(false)}
+          style={{
+            padding: '8px 16px',
+            borderRadius: '20px',
+            border: '1px solid #ccc',
+            background: '#fff',
+            cursor: 'pointer',
+            fontWeight: 'bold',
+            boxShadow: '0 2px 8px rgba(0,0,0,0.07)',
+            marginBottom: '6px',
+            display: 'flex',
+            alignItems: 'center',
+            gap: '8px',
+            fontSize: '15px'
+          }}
+        >
+          {/* SVG Bookmark Icon */}
+          <svg width="18" height="18" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <path d="M5 3C4.44772 3 4 3.44772 4 4V17C4 17.5523 4.44772 18 5 18C5.2566 18 5.50336 17.8946 5.68377 17.7071L10 13.086L14.3162 17.7071C14.4966 17.8946 14.7434 18 15 18C15.5523 18 16 17.5523 16 17V4C16 3.44772 15.5523 3 15 3H5Z" stroke="#333" strokeWidth="1.5" fill="none"/>
+          </svg>
+          {t('bookmark_button')}
+        </button>
+        {isBookmarkHovered && (
+          <div style={{
+            background: 'rgba(255,255,255,0.97)',
+            color: '#333',
+            borderRadius: '12px',
+            padding: '8px 14px',
+            fontSize: '13px',
+            boxShadow: '0 2px 8px rgba(0,0,0,0.07)',
+            maxWidth: '260px',
+            textAlign: 'right',
+            marginTop: '2px',
+            transition: 'opacity 0.2s',
+            pointerEvents: 'none'
+          }}>
+            {t('bookmark_message')}
+          </div>
+        )}
       </div>
       <div style={{ flex: 1, display: "flex", flexDirection: "column", alignItems: "center", justifyContent: "center" }}>
         <div style={{
