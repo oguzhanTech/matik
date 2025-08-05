@@ -238,15 +238,8 @@ const App = () => {
 
   const currentCount = counts[selectedZikir.id] || 0;
 
-  const userLang = navigator.language || navigator.userLanguage;
-  const isTurkish = userLang && userLang.startsWith("tr");
-
-  const title = isTurkish
-    ? "Zikirmatik | Online Zikir Çek, Dua Dinle - Online Tesbih Sayacı"
-    : "Zikirmatik | Online Tasbih Counter, Listen Prayers, Count Zikr";
-  const description = isTurkish
-    ? "Zikirmatik ile Online Zikir Çekin, Arapça ve Türkçe Sureleri Dinleyin | Zikirmatik Uygulaması"
-    : "Use Zikirmatik to count Zikr online, listen surahs, and more | Online Tasbih Counter";
+  const title = "Zikirmatik | Online Zikir Çek, Dua Dinle - Online Tasbih Counter";
+  const description = "Zikirmatik ile Sesli Online Zikir Çekin, Free Online Tasbih Counter with Sound, Sureleri Dinleyin, Tasbih Counter, Dua dinleyin, Zikr sayın, Digital Tasbih, Zikr Sounds Islamic Prayer Counter, Zikr Counter, Online Dua, Digital Zikr, Islamic App, Muslim Prayer Tool";
 
 
   return (
