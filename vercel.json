@@ -1,5 +1,11 @@
 {
-  "redirects": [],
+  "redirects": [
+    {
+      "source": "https://www.zikir-matik.com.tr/(.*)",
+      "destination": "https://zikir-matik.com.tr/$1",
+      "permanent": true
+    }
+  ],
   "headers": [
     {
       "source": "/(.*)",
