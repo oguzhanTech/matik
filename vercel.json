@@ -1,13 +1,14 @@
 {
   "redirects": [
     {
-      "source": "https://www.zikir-matik.com.tr/(.*)",
+      "source": "/(.*)",
+      "has": [
+        {
+          "type": "host",
+          "value": "www.zikir-matik.com.tr"
+        }
+      ],
       "destination": "https://zikir-matik.com.tr/$1",
-      "permanent": true
-    },
-    {
-      "source": "https://www.zikir-matik.com.tr",
-      "destination": "https://zikir-matik.com.tr",
       "permanent": true
     }
   ],
