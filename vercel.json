@@ -11,16 +11,5 @@
       "destination": "https://zikir-matik.com.tr/$1",
       "permanent": true
     }
-  ],
-  "headers": [
-    {
-      "source": "/(.*)",
-      "headers": [
-        {
-          "key": "X-Robots-Tag",
-          "value": "index, follow"
-        }
-      ]
-    }
   ]
 }
